@@ -48,8 +48,8 @@ class TreeNode:
 
     def find_min(self): 
         current = self
-        while current.right:
-            current = current.right
+        while current.left:
+            current = current.left
         return current
 
     def delete(self, data):
@@ -62,12 +62,14 @@ class TreeNode:
         else:
             if self.right == None:
                 return self.left
-            elif self.left == None:
+            if self.left == None:
                 return self.right
-            else:
-                self.data = self.right.find_min()
-                
-                
+            
+            min_larger_node = self.right.find_min()
+            self.data = min_larger_node.data
+            self.right = self.right.delete(min_larger_node.data)
+        return self
+                    
 raw = input("Enter a sequence of strings (space-delimited): ")
 inp = raw.split()
 if inp:
@@ -80,9 +82,13 @@ target = input("Enter a string to search: ")
 tree.search(target)
 while True:
     delete = input('Enter a string to delete in the tree: ')
-    tree = tree.delete(delete)
-    if delete == 'stop':
+    if delete.lower() == 'stop':
         break
-    print('\nTree after deletion: ')
-    tree.display()
+    tree = tree.delete(delete)
+    if tree:
+        print('\nafter deletion: ')
+        tree.display()
+    else:
+        print("Empty")
+        break
     print('Type stop to end program')
