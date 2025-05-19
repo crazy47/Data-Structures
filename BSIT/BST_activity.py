@@ -54,17 +54,12 @@ class TreeNode:
 
     def delete(self, data):
         if data < self.data:
-            if self.left:
-                self.left = self.left.delete(data)
+            self.left = self.left.delete(data) if self.left else None
         elif data > self.data:
-            if self.right:
-                self.right = self.right.delete(data)
+            self.right = self.right.delete(data) if self.right else None
         else:
-            if self.right == None:
-                return self.left
-            if self.left == None:
-                return self.right
-            
+            if not self.left: return self.right
+            if not self.right: return self.left
             min_larger_node = self.right.find_min()
             self.data = min_larger_node.data
             self.right = self.right.delete(min_larger_node.data)
